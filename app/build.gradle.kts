@@ -5,12 +5,11 @@ plugins {
 
 android {
     namespace = "br.com.rodrigoamora.transitorio"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "br.com.rodrigoamora.transitorio"
         minSdk = 26
-        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
