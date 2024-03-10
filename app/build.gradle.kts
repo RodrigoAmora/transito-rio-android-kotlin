@@ -43,14 +43,19 @@ dependencies {
     //AppCompat
     implementation("androidx.appcompat:appcompat:1.6.1")
 
-    //MaterialDesign
-    implementation("com.google.android.material:material:1.11.0")
-
     //ConstraintLayout
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     //KOIN
     implementation("io.insert-koin:koin-android:3.4.1")
+
+    //LIFECYCLE
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+    //MaterialDesign
+    implementation("com.google.android.material:material:1.11.0")
 
     //Navigation Fragment
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
