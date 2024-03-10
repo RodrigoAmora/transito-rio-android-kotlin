@@ -49,6 +49,10 @@ dependencies {
     //KOIN
     implementation("io.insert-koin:koin-android:3.4.1")
 
+    //GOOGLE-PLAY-SERVICES
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
     //LIFECYCLE
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
