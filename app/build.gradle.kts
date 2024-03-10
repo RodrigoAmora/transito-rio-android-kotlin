@@ -49,16 +49,29 @@ dependencies {
     //ConstraintLayout
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+    //KOIN
+    implementation("io.insert-koin:koin-android:3.4.1")
+
     //Navigation Fragment
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    //Test
+    // OKHTTP
+    implementation("com.squareup.okhttp3:logging-interceptor:3.13.1")
 
+    // RETROFIT
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    ///// LIBS FOR TEST /////
     //jUnit
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
     //Espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    //KOIN
+    testImplementation("io.insert-koin:koin-test:3.4.1")
+    testImplementation("io.insert-koin:koin-test-junit4:3.4.1")
 }
