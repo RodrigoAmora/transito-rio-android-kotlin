@@ -6,5 +6,9 @@
     <string name="action_about">About</string>
     <string name="action_settings">Settings</string>
 
+    <!-- MENSGAENS DE ERRO -->
+    <string name="error_gps_disabled">GPS disabled!</string>
+    <string name="error_no_internet">No internet!</string>
 
+    <string name="you_are_here">You\'re here!</string>
 </resources>
