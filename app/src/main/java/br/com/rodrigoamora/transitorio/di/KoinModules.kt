@@ -1,5 +1,6 @@
 package br.com.rodrigoamora.transitorio.di
 
+import br.com.rodrigoamora.transitorio.BuildConfig
 import br.com.rodrigoamora.transitorio.network.AppRetrofit
 import br.com.rodrigoamora.transitorio.network.webclient.OnibusWebClient
 import br.com.rodrigoamora.transitorio.repository.OnibusRepository
@@ -28,11 +29,11 @@ val repositoryModule = module {
 }
 
 val retrofitModule = module {
-    single { AppRetrofit("https://dados.mobilidade.rio/gps/").instantiateRetrofit() }
+    single { AppRetrofit(BuildConfig.BASE_URL_API).instantiateRetrofit() }
 }
 
 val servicesModule = module {
-    single { AppRetrofit("https://dados.mobilidade.rio/gps/").onibusService() }
+    single { AppRetrofit(BuildConfig.BASE_URL_API).onibusService() }
 }
 
 val viewModelModule = module {
