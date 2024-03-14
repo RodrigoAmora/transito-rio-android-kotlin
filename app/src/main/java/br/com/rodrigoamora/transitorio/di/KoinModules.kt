@@ -2,6 +2,8 @@ package br.com.rodrigoamora.transitorio.di
 
 import br.com.rodrigoamora.transitorio.network.AppRetrofit
 import br.com.rodrigoamora.transitorio.network.webclient.OnibusWebClient
+import br.com.rodrigoamora.transitorio.repository.OnibusRepository
+import br.com.rodrigoamora.transitorio.repository.impl.OnibusRepositoryImpl
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.GlobalContext.loadKoinModules
@@ -12,6 +14,7 @@ fun injectFeature() = loadFeature
 private val loadFeature by lazy {
     loadKoinModules(
         listOf(
+            repositoryModule,
             retrofitModule,
             servicesModule,
             viewModelModule,
@@ -20,12 +23,16 @@ private val loadFeature by lazy {
     )
 }
 
+val repositoryModule = module {
+    single<OnibusRepository> { OnibusRepositoryImpl(get()) }
+}
+
 val retrofitModule = module {
-    single { AppRetrofit("").instantiateRetrofit() }
+    single { AppRetrofit("https://dados.mobilidade.rio/gps/").instantiateRetrofit() }
 }
 
 val servicesModule = module {
-    single { AppRetrofit("").onibusService() }
+    single { AppRetrofit("https://dados.mobilidade.rio/gps/").onibusService() }
 }
 
 val viewModelModule = module {
