@@ -1,8 +1,11 @@
 package br.com.rodrigoamora.transitorio.ui.activity
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,6 +13,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.ActivityMainBinding
+import br.com.rodrigoamora.transitorio.util.PermissionUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.checkPermissions()
         this.bindingLayout()
         this.createNavigationBar()
     }
@@ -49,11 +54,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(this.binding.root)
     }
 
+    private fun checkPermissions() {
+        PermissionUtil.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
+    }
+
     private fun createNavigationBar() {
         setSupportActionBar(this.binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         this.appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, this.appBarConfiguration)
+    }
+
+    fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 }
