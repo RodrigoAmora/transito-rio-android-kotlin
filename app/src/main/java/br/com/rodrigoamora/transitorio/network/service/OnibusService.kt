@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface OnibusService {
-    @GET("gps/sppo")
+    @GET("sppo")
     fun buscarOnibus(@Query("dataInicial") dataInicial: String): Call<MutableList<Onibus>>
 }
