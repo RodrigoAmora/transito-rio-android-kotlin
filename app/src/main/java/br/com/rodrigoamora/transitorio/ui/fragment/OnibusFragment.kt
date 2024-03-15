@@ -173,21 +173,6 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
                     //var infoWindowCustom: SalonInfoWindowCustom = SalonInfoWindowCustom(activity?.baseContext!!, salon)
                     //googleMap.setInfoWindowAdapter(infoWindowCustom)
-
-//                    this.googleMap.setOnInfoWindowClickListener {
-//                        val activity = context as SalonActivity
-//
-//                        val salonBundle = Bundle()
-//                        salonBundle.putSerializable("salon", onibus)
-//
-//                        FragmentUtil.changeFragment(
-//                            com.google.android.gms.maps.R.id.container,
-//                            SalonDescriptionFragment(),
-//                            activity.supportFragmentManager,
-//                            true,
-//                            salonBundle
-//                        )
-//                    }
                 }
             }
         }
