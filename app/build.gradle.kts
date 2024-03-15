@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
 
             buildConfigField("String", "BASE_URL_API", "\"https://dados.mobilidade.rio/gps/\"")
-            buildConfigField("String", "DATABASE_NAME", "\"salonapp_database_dev.db\"")
+            buildConfigField("String", "DATABASE_NAME", "\"transitorio_database_dev.db\"")
         }
 
         release {
@@ -34,7 +34,7 @@ android {
             )
 
             buildConfigField("String", "BASE_URL_API", "\"https://dados.mobilidade.rio/gps/\"")
-            buildConfigField("String", "DATABASE_NAME", "\"salonapp_database.db\"")
+            buildConfigField("String", "DATABASE_NAME", "\"transitorio_database.db\"")
         }
     }
     compileOptions {
