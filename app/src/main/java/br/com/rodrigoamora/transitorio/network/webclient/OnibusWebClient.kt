@@ -11,7 +11,7 @@ class OnibusWebClient(
 ) {
     private fun<T> executeRequest(
         call: Call<T>,
-        completion: (salonsSaved: T?) -> Unit,
+        completion: (listaOnibus: T?) -> Unit,
         failure: (errorCode: Int) -> Unit
     ) {
         call.enqueue(object : Callback<T> {
@@ -33,12 +33,12 @@ class OnibusWebClient(
     }
 
     fun buscarOnibus(dataInicial: String,
-                     completion: (salonsSaved: List<Onibus>?) -> Unit,
+                     completion: (listaOnibus: List<Onibus>?) -> Unit,
                      failure: (errorCode: Int?) -> Unit
     ) {
         this.executeRequest(
-            service.buscarOnibus(dataInicial),
-            completion = { salonList -> completion(salonList) },
+            this.service.buscarOnibus(dataInicial),
+            completion = { listaOnibus -> completion(listaOnibus) },
             failure = { errorCode ->  failure(errorCode) }
         )
     }
