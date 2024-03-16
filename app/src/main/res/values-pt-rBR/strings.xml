@@ -11,5 +11,11 @@
     <string name="error_gps_disabled">GPS desativado!</string>
     <string name="error_no_internet">Sem internet!</string>
 
+    <!-- OnibusFragment-->
+    <string name="onibus_fragment_name">OnibusFragment</string>
+    <string name="aguarde">Aguarde</string>
+    <string name="carro">Carro:</string>
+    <string name="linha">Linha:</string>
+    <string name="numero_carro">número do carro:</string>
     <string name="you_are_here">Você está aqui!</string>
 </resources>
