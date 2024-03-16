@@ -18,6 +18,7 @@ import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
 import br.com.rodrigoamora.transitorio.util.GPSUtil
+import br.com.rodrigoamora.transitorio.util.NetworkUtil
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -105,17 +106,21 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     private fun buscarOnibus() {
-        this.progressBar.visibility = View.VISIBLE
-        this.viewModel.buscarOnibus()
-            .observe(this.mainActivity,
-                Observer { resource ->
-                    this.progressBar.visibility = View.GONE
-                    resource.result?.let { listaOnibus ->
-                        this.listaOnibus = listaOnibus
-                        populateMap()
+        if (NetworkUtil.checkConnection(this.mainActivity)) {
+            this.progressBar.visibility = View.VISIBLE
+            this.viewModel.buscarOnibus()
+                .observe(this.mainActivity,
+                    Observer { resource ->
+                        this.progressBar.visibility = View.GONE
+                        resource.result?.let { listaOnibus ->
+                            this.listaOnibus = listaOnibus
+                            populateMap()
+                        }
                     }
-                }
-        )
+                )
+        } else {
+            this.mainActivity.showToast(getString(R.string.error_no_internet))
+        }
     }
 
     private fun createLocationWhenGetLastKnownLocationReturnsNull(): Location {
