@@ -52,10 +52,10 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentOnibusBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        this._binding = FragmentOnibusBinding.inflate(inflater, container, false)
+        val root: View = this.binding.root
 
-        this.progressBar = binding.progressBar
+        this.progressBar = this.binding.progressBar
 
         return root
     }
@@ -105,6 +105,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     private fun buscarOnibus() {
+        this.progressBar.visibility = View.VISIBLE
         this.viewModel.buscarOnibus()
             .observe(this.mainActivity,
                 Observer { resource ->
