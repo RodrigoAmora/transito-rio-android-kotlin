@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/OnibusFragment"
         android:name="br.com.rodrigoamora.transitorio.ui.fragment.OnibusFragment"
-        android:label="@string/app_name"
+        android:label="@string/onibus_fragment_name"
         tools:layout="@layout/fragment_onibus">
     </fragment>
 
