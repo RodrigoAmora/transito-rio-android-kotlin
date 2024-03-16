@@ -2,6 +2,7 @@ package br.com.rodrigoamora.transitorio.ui.activity
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +16,9 @@ import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.ActivityMainBinding
 import br.com.rodrigoamora.transitorio.util.PermissionUtil
 
+
+private const val PERMISSION_REQUEST_CODE = 200
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -23,8 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.checkPermissions()
-        this.bindingLayout()
-        this.createNavigationBar()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -40,6 +42,31 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    this.bindingLayout()
+                    this.createNavigationBar()
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the feature requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return
+            }
+            else -> {}
         }
     }
 
