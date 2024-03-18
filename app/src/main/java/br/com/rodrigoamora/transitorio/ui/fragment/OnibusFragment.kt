@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
+import br.com.rodrigoamora.transitorio.extension.hide
+import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
+import br.com.rodrigoamora.transitorio.ui.map.adapter.OnibusInfoWindowCustom
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
 import br.com.rodrigoamora.transitorio.util.GPSUtil
 import br.com.rodrigoamora.transitorio.util.NetworkUtil
@@ -74,7 +77,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         this.mapFragment!!.setHasOptionsMenu(false)
     }
 
-    override fun onLocationChanged(p0: Location) {}
+    override fun onLocationChanged(location: Location) {}
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap) {
@@ -107,11 +110,11 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
-            this.progressBar.visibility = View.VISIBLE
+            this.progressBar.show()
             this.viewModel.buscarOnibus()
                 .observe(this.mainActivity,
                     Observer { resource ->
-                        this.progressBar.visibility = View.GONE
+                        this.progressBar.hide()
                         resource.result?.let { listaOnibus ->
                             this.listaOnibus = listaOnibus
                             populateMap()
@@ -155,13 +158,16 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
         this.mainActivity.showToast(getString(R.string.error_gps_disabled))
 
-        return createLocationWhenGetLastKnownLocationReturnsNull()
+        return this.createLocationWhenGetLastKnownLocationReturnsNull()
     }
 
     fun populateMap() {
         if (this.listaOnibus.isNotEmpty()) {
             for (onibus in this.listaOnibus) {
-                val latLngSalon = LatLng(onibus.latitude.toDouble(), onibus.longitude.toDouble())
+                val latitude = onibus.latitude.replace(",", ".")
+                val longitude = onibus.longitude.replace(",", ".")
+
+                val latLngSalon = LatLng(latitude.toDouble(), longitude.toDouble())
 
                 val newLocation = Location("newlocation")
                 newLocation.latitude = latLngSalon.latitude
@@ -177,8 +183,8 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                             .position(latLngSalon)
                     )
 
-                    //var infoWindowCustom: SalonInfoWindowCustom = SalonInfoWindowCustom(activity?.baseContext!!, salon)
-                    //googleMap.setInfoWindowAdapter(infoWindowCustom)
+                    val infoWindowCustom: OnibusInfoWindowCustom = OnibusInfoWindowCustom(this.mainActivity, onibus)
+                    this.googleMap.setInfoWindowAdapter(infoWindowCustom)
                 }
             }
         }
