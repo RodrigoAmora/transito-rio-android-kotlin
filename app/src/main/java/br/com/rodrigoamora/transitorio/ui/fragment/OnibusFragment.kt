@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.android.ext.android.inject
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
@@ -108,6 +110,12 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         }
     }
 
+    private fun agendarProximaBusca() {
+        Timer().schedule(10000) {
+            buscarOnibus()
+        }
+    }
+
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
             this.progressBar.show()
@@ -117,7 +125,8 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                         this.progressBar.hide()
                         resource.result?.let { listaOnibus ->
                             this.listaOnibus = listaOnibus
-                            populateMap()
+                            this.populateMap()
+                            this.agendarProximaBusca()
                         }
                     }
                 )
