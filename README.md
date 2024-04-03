@@ -7,7 +7,7 @@ O App roda a partir do Android 8.0 (API Level 26)
 
 Dependências:
 -------------
-O projeto usa como dependência:
+O projeto usa as seguintes dependência:
 
 - Google Maps API;
 - Koin;
