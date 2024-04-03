@@ -1,6 +1,8 @@
 # transito-rio-android-kotlin
-Aplicativo Android que exibe a posição dos ônibus na cidade do Rio de Janeiro em um intervalo de cinco minutos.
+Projeto que consulta a API do Data.rio para pegar a posição da frota de ônibus em circulação do Rio de Janeiro, o app amostra a posição dos ônibus nos últimos 10 segundos.
+
 <br>
+
 O App roda a partir do Android 8.0 (API Level 26)
 
 <hr>
