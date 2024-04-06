@@ -9,10 +9,12 @@ android {
 
     defaultConfig {
         applicationId = "br.com.rodrigoamora.transitorio"
+
         minSdk = 28
         targetSdk = 33
-        versionCode = 38
-        versionName = "3.0.0a"
+
+        versionCode = 39
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
