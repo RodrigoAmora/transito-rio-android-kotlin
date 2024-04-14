@@ -18,6 +18,13 @@ O projeto usa as seguintes dependência:
 - Navigation;
 - Retrofit;
 
+Configuração:
+-------------
+Criar o arquivo `secrets.properties` no diretório raiz do projeto e colocar a propriedade `MAPS_API_KEY` com a API_KEY do Google Maps. <br>
+
+Exmpelo:<br>
+`MAPS_API_KEY=<API_KEY_DO_GOOGLE_MAPS>`
+
 <hr>
 
 Disponível na Play Store: <br>
