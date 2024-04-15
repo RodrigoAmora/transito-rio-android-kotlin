@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+secrets.properties
+
+### MacOS ###
+.DS_Store
