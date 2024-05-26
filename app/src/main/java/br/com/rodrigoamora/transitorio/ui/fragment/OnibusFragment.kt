@@ -12,13 +12,13 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
 import br.com.rodrigoamora.transitorio.extension.hide
 import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
-import br.com.rodrigoamora.transitorio.ui.map.adapter.OnibusInfoWindowCustom
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
 import br.com.rodrigoamora.transitorio.util.GPSUtil
 import br.com.rodrigoamora.transitorio.util.NetworkUtil
@@ -30,6 +30,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import java.util.Timer
 import kotlin.concurrent.schedule
@@ -45,7 +48,6 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     private lateinit var location: Location
 
     private var locationManager: LocationManager? = null
-    private lateinit var listaOnibus: List<Onibus>
 
     private val viewModel: OnibusViewModel by inject()
 
@@ -106,30 +108,38 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
             map?.isMyLocationEnabled = false
             map?.mapType = GoogleMap.MAP_TYPE_NORMAL
 
-            centerMap(update)
+            this.centerMap(update)
         }
     }
 
     private fun agendarProximaBusca() {
         Timer().schedule(10000) {
+//            limparOnibus()
             buscarOnibus()
         }
+    }
+
+    private fun limparOnibus() {
+        this.googleMap.clear()
     }
 
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
             this.progressBar.show()
-            this.viewModel.buscarOnibus()
-                .observe(this.mainActivity,
-                    Observer { resource ->
-                        this.progressBar.hide()
-                        resource.result?.let { listaOnibus ->
-                            this.listaOnibus = listaOnibus
-                            this.populateMap()
-                            this.agendarProximaBusca()
-                        }
-                    }
-                )
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    viewModel.buscarOnibus()
+                        .observe(mainActivity,
+                            Observer { resource ->
+                                progressBar.hide()
+                                resource.result?.let { listaOnibus ->
+                                    populateMap(listaOnibus)
+                                    agendarProximaBusca()
+                                }
+                            }
+                        )
+                }
+            }
         } else {
             this.mainActivity.showToast(getString(R.string.error_no_internet))
         }
@@ -170,9 +180,9 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         return this.createLocationWhenGetLastKnownLocationReturnsNull()
     }
 
-    fun populateMap() {
-        if (this.listaOnibus.isNotEmpty()) {
-            for (onibus in this.listaOnibus) {
+    fun populateMap(listaOnibus: List<Onibus>) {
+        if (listaOnibus.isNotEmpty()) {
+            for (onibus in listaOnibus) {
                 val latitude = onibus.latitude.replace(",", ".")
                 val longitude = onibus.longitude.replace(",", ".")
 
@@ -192,12 +202,13 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                             .position(latLngSalon)
                     )
 
-                    val infoWindowCustom: OnibusInfoWindowCustom = OnibusInfoWindowCustom(this.mainActivity, onibus)
-                    this.googleMap.setInfoWindowAdapter(infoWindowCustom)
+//                    val infoWindowCustom: OnibusInfoWindowCustom = OnibusInfoWindowCustom(this.mainActivity, onibus)
+//                    this.googleMap.setInfoWindowAdapter(infoWindowCustom)
                 }
             }
         }
 
         this.mapFragment.getMapAsync(this);
     }
+
 }
