@@ -1,6 +1,7 @@
 package br.com.rodrigoamora.transitorio.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Onibus (
     @SerializedName("id")
@@ -17,4 +18,4 @@ data class Onibus (
 
     @SerializedName("datahoraenvio")
     var datahoraenvio: String
-)
+): Serializable
