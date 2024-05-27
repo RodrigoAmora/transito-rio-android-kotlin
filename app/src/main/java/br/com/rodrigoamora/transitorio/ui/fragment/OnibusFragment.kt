@@ -15,8 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
-import br.com.rodrigoamora.transitorio.extension.hide
-import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
@@ -31,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
@@ -113,29 +112,31 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     private fun agendarProximaBusca() {
+        this.limparMapa()
         Timer().schedule(10000) {
-//            limparOnibus()
             buscarOnibus()
         }
     }
 
-    private fun limparOnibus() {
+    private fun limparMapa() {
         this.googleMap.clear()
     }
 
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
-            this.progressBar.show()
+//            this.progressBar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     viewModel.buscarOnibus()
                         .observe(mainActivity,
                             Observer { resource ->
-                                progressBar.hide()
+//                                progressBar.visibility = View.GONE
+
                                 resource.result?.let { listaOnibus ->
                                     populateMap(listaOnibus)
-                                    agendarProximaBusca()
                                 }
+
+                                agendarProximaBusca()
                             }
                         )
                 }
@@ -193,7 +194,6 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                 newLocation.longitude = latLngSalon.longitude
 
                 val distance = this.location.distanceTo(newLocation)/1000
-
                 if (distance <= 3000) {
                     this.googleMap.addMarker(
                         MarkerOptions()
@@ -208,7 +208,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
             }
         }
 
-        this.mapFragment.getMapAsync(this);
+        this.mapFragment.getMapAsync(this)
     }
 
 }
