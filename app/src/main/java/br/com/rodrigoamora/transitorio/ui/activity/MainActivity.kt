@@ -86,6 +86,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNavigationBar() {
+        this.binding.toolbar.setBackgroundColor(getColor(R.color.colorPrimary))
+        this.binding.toolbar.title = getString(R.string.app_name)
         setSupportActionBar(this.binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
