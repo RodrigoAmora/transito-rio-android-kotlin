@@ -7,8 +7,6 @@ Projeto que consulta a API do Data.rio para pegar a posição da frota de ônibu
 
 O App roda a partir do Android 8.0 (API Level 26), usa a arquitetura MVVM, injeção de dependência e a API de localização do SDK.
 
-<hr>
-
 Dependências:
 -------------
 O projeto usa as seguintes dependência:
