@@ -18,4 +18,9 @@
     <string name="linha">Linha:</string>
     <string name="numero_carro">número do carro:</string>
     <string name="you_are_here">Você está aqui!</string>
+
+    <!-- ABOUT -->
+    <string name="created_by">Criado por: Rodrigo Amora</string>
+    <string name="email_rodrigo_amora">Email: rodrigo.amora.freitas@gmail.com</string>
+    <string name="version_app">Version: %s</string>
 </resources>
