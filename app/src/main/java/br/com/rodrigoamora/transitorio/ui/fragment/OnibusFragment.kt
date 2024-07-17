@@ -132,10 +132,9 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 //                                progressBar.visibility = View.GONE
 
                                 resource.result?.let { listaOnibus ->
+                                    agendarProximaBusca()
                                     populateMap(listaOnibus)
                                 }
-
-                                agendarProximaBusca()
                             }
                         )
                 }
@@ -181,6 +180,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     fun populateMap(listaOnibus: List<Onibus>) {
+        var onibusProximos = 0
         if (listaOnibus.isNotEmpty()) {
             for (onibus in listaOnibus) {
                 val latitude = onibus.latitude.replace(",", ".")
@@ -192,22 +192,30 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                 newLocation.latitude = latLngSalon.latitude
                 newLocation.longitude = latLngSalon.longitude
 
-                val distance = this.location.distanceTo(newLocation)/1000
-                if (distance <= 3000) {
-                    this.googleMap.addMarker(
-                        MarkerOptions()
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                            .title(onibus.ordem)
-                            .position(latLngSalon)
-                    )
+                this.googleMap.addMarker(
+                    MarkerOptions()
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                        .title(onibus.ordem)
+                        .position(latLngSalon)
+                )
 
 //                    val infoWindowCustom: OnibusInfoWindowCustom = OnibusInfoWindowCustom(this.mainActivity, onibus)
 //                    this.googleMap.setInfoWindowAdapter(infoWindowCustom)
+
+                val distance = this.location.distanceTo(newLocation)/1000
+                if (distance <= 3000) {
+                    onibusProximos += 1
                 }
             }
-        }
 
-        this.mapFragment.getMapAsync(this)
+            if (onibusProximos == 0) {
+                val latLng = LatLng(-22.8987823, -43.1807259)
+                val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+                this.centerMap(update)
+            }
+
+            this.mapFragment.getMapAsync(this)
+        }
     }
 
 }
