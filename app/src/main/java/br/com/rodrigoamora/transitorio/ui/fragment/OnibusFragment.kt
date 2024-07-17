@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
+import br.com.rodrigoamora.transitorio.extension.hide
+import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
@@ -123,14 +125,12 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
-//            this.progressBar.visibility = View.VISIBLE
+//            this.progressBar.show()
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     viewModel.buscarOnibus()
                         .observe(mainActivity,
                             Observer { resource ->
-//                                progressBar.visibility = View.GONE
-
                                 resource.result?.let { listaOnibus ->
                                     agendarProximaBusca()
                                     populateMap(listaOnibus)
@@ -180,8 +180,8 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     fun populateMap(listaOnibus: List<Onibus>) {
-        var onibusProximos = 0
         if (listaOnibus.isNotEmpty()) {
+            var onibusProximos = 0
             for (onibus in listaOnibus) {
                 val latitude = onibus.latitude.replace(",", ".")
                 val longitude = onibus.longitude.replace(",", ".")
@@ -214,7 +214,9 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                 this.centerMap(update)
             }
 
-            this.mapFragment.getMapAsync(this)
+//            this.mapFragment.getMapAsync(this)
+
+            //this.progressBar.hide()
         }
     }
 
