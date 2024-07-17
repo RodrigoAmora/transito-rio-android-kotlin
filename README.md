@@ -25,6 +25,13 @@ Criar o arquivo `secrets.properties` no diretório raiz do projeto e colocar a p
 Exmpelo:<br>
 `MAPS_API_KEY=<API_KEY_DO_GOOGLE_MAPS>`
 
+Autor:
+------
+<b>Rodrigo Amora</b>
+
+LinkedIn: https://linkedin.com/in/rodrigoamora <br>
+E-mail: rodrigo.amora.freitas@gmail.com
+
 <hr>
 
 Disponível na Play Store: <br>
