@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class Onibus (
-    @SerializedName("id")
+    @SerializedName("ordem")
     var ordem: String,
 
     @SerializedName("latitude")
