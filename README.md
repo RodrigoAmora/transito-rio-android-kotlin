@@ -11,7 +11,7 @@ Dependências:
 -------------
 O projeto usa as seguintes dependência:
 
-- Google Maps API;
+- Google Maps;
 - Koin;
 - LifeCycle;
 - Material Design;
