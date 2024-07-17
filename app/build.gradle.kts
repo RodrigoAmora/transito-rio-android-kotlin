@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "br.com.rodrigoamora.transitorio"
 
-        minSdk = 28
+        minSdk = 31
         targetSdk = 34
 
         versionCode = 40
