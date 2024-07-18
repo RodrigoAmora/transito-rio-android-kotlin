@@ -13,5 +13,5 @@
     <color name="dark_green">#006400</color>
     <color name="grey_goose">#D1D0CE</color>
 
-    <color name="text_color">@color/black</color>
+    <color name="text_color">@color/white</color>
 </resources>
