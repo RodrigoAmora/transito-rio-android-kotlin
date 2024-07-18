@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentSobreBinding
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.util.PackageInfoUtil
@@ -36,7 +37,8 @@ class SobreFragment: Fragment() {
     }
 
     private fun initView() {
+        val versionName = PackageInfoUtil.getVersionName(this.mainActivity)
         this.tvVersionApp = this.binding.tvVersionApp
-        this.tvVersionApp.text = PackageInfoUtil.getVersionName(this.mainActivity)
+        this.tvVersionApp.text = getString(R.string.version_app, versionName)
     }
 }
