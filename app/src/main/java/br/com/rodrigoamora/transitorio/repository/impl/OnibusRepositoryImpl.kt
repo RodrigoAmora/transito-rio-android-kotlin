@@ -43,8 +43,9 @@ class OnibusRepositoryImpl(
                     TimeZone.getTimeZone("America/Sao_Paulo").toZoneId()
                 ).plusHours(1)
 
-            val c = Duration.between(triggerTime, LocalDateTime.now()).toSeconds()
-            if (c <= 10) {
+            val diferencaEmSegundos = Duration.between(triggerTime, LocalDateTime.now())
+                                                    .toSeconds()
+            if (diferencaEmSegundos <= 10) {
                 novaLista.add(onibus)
             }
         }
