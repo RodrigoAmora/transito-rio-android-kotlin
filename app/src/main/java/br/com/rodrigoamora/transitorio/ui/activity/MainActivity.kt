@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_about -> {
+                this.navController.navigate(R.id.action_OnibusFragment_to_SobreFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -90,9 +96,9 @@ class MainActivity : AppCompatActivity() {
         this.binding.toolbar.title = getString(R.string.app_name)
         setSupportActionBar(this.binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        this.appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, this.appBarConfiguration)
+        this.navController = findNavController(R.id.nav_host_fragment_content_main)
+        this.appBarConfiguration = AppBarConfiguration(this.navController.graph)
+        setupActionBarWithNavController(this.navController, this.appBarConfiguration)
     }
 
     fun showToast(msg: String) {
