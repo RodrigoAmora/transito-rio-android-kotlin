@@ -15,8 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
-import br.com.rodrigoamora.transitorio.extension.hide
-import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
@@ -131,6 +129,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                     viewModel.buscarOnibus()
                         .observe(mainActivity,
                             Observer { resource ->
+                                googleMap.clear()
                                 resource.result?.let { listaOnibus ->
                                     agendarProximaBusca()
                                     populateMap(listaOnibus)
@@ -195,7 +194,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                 this.googleMap.addMarker(
                     MarkerOptions()
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                        .title(onibus.ordem)
+                        .title(onibus.ordem+" - "+onibus.linha)
                         .position(latLngSalon)
                 )
 
