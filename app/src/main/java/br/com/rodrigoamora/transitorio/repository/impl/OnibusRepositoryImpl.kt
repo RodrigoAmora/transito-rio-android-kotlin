@@ -10,7 +10,6 @@ import br.com.rodrigoamora.transitorio.repository.Resource
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
 class OnibusRepositoryImpl(
@@ -19,10 +18,10 @@ class OnibusRepositoryImpl(
 
     private val mediator = MediatorLiveData<Resource<List<Onibus>?>>()
 
-    override fun buscarOnibus(dataInicial: String): LiveData<Resource<List<Onibus>?>> {
+    override fun buscarOnibus(dataInicial: String, dataFinal: String): LiveData<Resource<List<Onibus>?>> {
         val failuresFromWebApiLiveData = MutableLiveData<Resource<List<Onibus>?>>()
 
-        this.onibusWebClient.buscarOnibus(dataInicial,
+        this.onibusWebClient.buscarOnibus(dataInicial, dataFinal,
             completion = { listaOnibus ->
                 listaOnibus?.let {
                     mediator.value = Resource(verificarHora(it))
@@ -36,7 +35,7 @@ class OnibusRepositoryImpl(
     }
 
     private fun verificarHora(listOnibus: List<Onibus>): List<Onibus> {
-        val noaLista = mutableListOf<Onibus>()
+        val novaLista = mutableListOf<Onibus>()
         for (onibus in listOnibus) {
             val triggerTime =
                 LocalDateTime.ofInstant(
@@ -46,9 +45,9 @@ class OnibusRepositoryImpl(
 
             val c = Duration.between(triggerTime, LocalDateTime.now()).toSeconds()
             if (c <= 10) {
-                noaLista.add(onibus)
+                novaLista.add(onibus)
             }
         }
-        return noaLista.toList()
+        return novaLista.toList()
     }
 }

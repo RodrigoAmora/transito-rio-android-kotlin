@@ -33,11 +33,12 @@ class OnibusWebClient(
     }
 
     fun buscarOnibus(dataInicial: String,
+                     dataFinal: String,
                      completion: (listaOnibus: List<Onibus>?) -> Unit,
                      failure: (errorCode: Int?) -> Unit
     ) {
         this.executeRequest(
-            this.service.buscarOnibus(dataInicial),
+            this.service.buscarOnibus(dataInicial, dataFinal),
             completion = { listaOnibus -> completion(listaOnibus) },
             failure = { errorCode ->  failure(errorCode) }
         )

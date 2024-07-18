@@ -13,6 +13,7 @@ class OnibusViewModel(
 ): ViewModel() {
     fun buscarOnibus(): LiveData<Resource<List<Onibus>?>> {
         val dateTimeFormat = "yyyy-dd-MM:HH:mm:ss"
-        return this.onibusRepository.buscarOnibus(LocalDateTime.now().getDateFormatted(dateTimeFormat))
+        val dataHora = LocalDateTime.now().getDateFormatted(dateTimeFormat)
+        return this.onibusRepository.buscarOnibus(dataHora, dataHora)
     }
 }
