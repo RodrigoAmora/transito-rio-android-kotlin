@@ -131,9 +131,10 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                             Observer { resource ->
                                 googleMap.clear()
                                 resource.result?.let { listaOnibus ->
-                                    agendarProximaBusca()
-                                    populateMap(listaOnibus)
+                                    val onibusProximos = verificarOnibusProximos(listaOnibus)
+                                    populateMap(onibusProximos)
                                 }
+                                agendarProximaBusca()
                             }
                         )
                 }
@@ -180,43 +181,59 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
     fun populateMap(listaOnibus: List<Onibus>) {
         if (listaOnibus.isNotEmpty()) {
-            var onibusProximos = 0
             for (onibus in listaOnibus) {
-                val latitude = onibus.latitude.replace(",", ".")
-                val longitude = onibus.longitude.replace(",", ".")
-
-                val latLngSalon = LatLng(latitude.toDouble(), longitude.toDouble())
-
-                val newLocation = Location("newlocation")
-                newLocation.latitude = latLngSalon.latitude
-                newLocation.longitude = latLngSalon.longitude
+                val localizacaoOnibus = this.instanciarNovaLatLng(onibus)
 
                 this.googleMap.addMarker(
                     MarkerOptions()
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                         .title(onibus.ordem+" - "+onibus.linha)
-                        .position(latLngSalon)
+                        .position(localizacaoOnibus)
                 )
 
 //                    val infoWindowCustom: OnibusInfoWindowCustom = OnibusInfoWindowCustom(this.mainActivity, onibus)
 //                    this.googleMap.setInfoWindowAdapter(infoWindowCustom)
 
-                val distance = this.location.distanceTo(newLocation)/1000
-                if (distance <= 3000) {
-                    onibusProximos += 1
-                }
+
             }
 
-            if (onibusProximos == 0) {
-                val latLng = LatLng(-22.8987823, -43.1807259)
-                val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
-                this.centerMap(update)
-            }
+            val latLng = this.instanciarNovaLatLng(listaOnibus.get(0))
+            val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+            this.centerMap(update)
+            this.mapFragment.getMapAsync(this)
 
-//            this.mapFragment.getMapAsync(this)
-
+            this.agendarProximaBusca()
             //this.progressBar.hide()
         }
     }
 
+    private fun verificarOnibusProximos(listaOnibus: List<Onibus>): List<Onibus> {
+        val onibusProximos = mutableListOf<Onibus>()
+        for (onibus in listaOnibus) {
+            val localizacaoOnibus = this.instanciarNovaLocalizacao(onibus)
+            val distance = this.location.distanceTo(localizacaoOnibus) / 1000
+            if (distance <= 1500) {
+                onibusProximos.add(onibus)
+            }
+        }
+        return onibusProximos.toList()
+    }
+
+    private fun instanciarNovaLatLng(onibus: Onibus): LatLng {
+        val latitude = onibus.latitude.replace(",", ".")
+        val longitude = onibus.longitude.replace(",", ".")
+
+        return LatLng(latitude.toDouble(), longitude.toDouble())
+    }
+
+    private fun instanciarNovaLocalizacao(onibus: Onibus): Location {
+        val latitude = onibus.latitude.replace(",", ".")
+        val longitude = onibus.longitude.replace(",", ".")
+
+        val localizacaoOnibus = Location("newlocation")
+        localizacaoOnibus.latitude = latitude.toDouble()
+        localizacaoOnibus.longitude = longitude.toDouble()
+
+        return localizacaoOnibus
+    }
 }
