@@ -24,7 +24,7 @@ class OnibusRepositoryImpl(
         this.onibusWebClient.buscarOnibus(dataInicial, dataFinal,
             completion = { listaOnibus ->
                 listaOnibus?.let {
-                    mediator.value = Resource(verificarHora(it))
+                    mediator.value = Resource(it)
                 }
             },
             failure = {
@@ -46,6 +46,13 @@ class OnibusRepositoryImpl(
             val diferencaEmSegundos = Duration.between(triggerTime, LocalDateTime.now())
                                                     .toSeconds()
             if (diferencaEmSegundos <= 10) {
+                var posicao = 0
+                for (onibusJaAdicionado in novaLista) {
+                    if (onibusJaAdicionado.ordem == onibus.ordem) {
+                        novaLista.removeAt(posicao)
+                    }
+                    posicao += 1
+                }
                 novaLista.add(onibus)
             }
         }
