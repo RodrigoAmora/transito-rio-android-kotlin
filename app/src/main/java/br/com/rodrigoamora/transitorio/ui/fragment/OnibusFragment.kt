@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import br.com.rodrigoamora.transitorio.R
 import br.com.rodrigoamora.transitorio.databinding.FragmentOnibusBinding
+import br.com.rodrigoamora.transitorio.extension.hide
+import br.com.rodrigoamora.transitorio.extension.show
 import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity
 import br.com.rodrigoamora.transitorio.ui.viewmodel.OnibusViewModel
@@ -27,6 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,6 +53,8 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
     private val viewModel: OnibusViewModel by inject()
 
+    private lateinit var myMarker: MarkerOptions
+
     private val mainActivity: MainActivity by lazy {
         activity as MainActivity
     }
@@ -69,7 +75,13 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.initView()
         this.getLocation(this.mainActivity)
+        this.progressBar.show()
         this.buscarOnibus()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.googleMap.clear()
     }
 
     private fun initView() {
@@ -92,17 +104,22 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
         if (map != null) {
             this.googleMap = map
+            val mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
+                this.mainActivity,
+                R.raw.map_style)
+            this.googleMap.setMapStyle(mapStyleOptions)
         }
 
         if (GPSUtil.gpsIsEnable(mainActivity)) {
             val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             map?.moveCamera(update)
-            map?.addMarker(
-                MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                    .title(getString(R.string.you_are_here))
-                    .position(latLng)
-            )
+            this.myMarker = MarkerOptions()
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                            .title(getString(R.string.you_are_here))
+                            .position(latLng)
+
+            map?.addMarker(this.myMarker)
+
             map?.isMyLocationEnabled = false
             map?.mapType = GoogleMap.MAP_TYPE_NORMAL
 
@@ -123,13 +140,12 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
 
     private fun buscarOnibus() {
         if (NetworkUtil.checkConnection(this.mainActivity)) {
-//            this.progressBar.show()
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     viewModel.buscarOnibus()
                         .observe(mainActivity,
                             Observer { resource ->
-                                googleMap.clear()
+                                limparMapa()
                                 resource.result?.let { listaOnibus ->
                                     val onibusProximos = verificarOnibusProximos(listaOnibus)
                                     populateMap(onibusProximos)
@@ -180,6 +196,9 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
     }
 
     fun populateMap(listaOnibus: List<Onibus>) {
+        this.progressBar.hide()
+        this.googleMap.addMarker(this.myMarker)
+
         if (listaOnibus.isNotEmpty()) {
             for (onibus in listaOnibus) {
                 val localizacaoOnibus = this.instanciarNovaLatLng(onibus)
@@ -203,7 +222,6 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
             this.mapFragment.getMapAsync(this)
 
             this.agendarProximaBusca()
-            //this.progressBar.hide()
         }
     }
 
@@ -211,8 +229,9 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         val onibusProximos = mutableListOf<Onibus>()
         for (onibus in listaOnibus) {
             val localizacaoOnibus = this.instanciarNovaLocalizacao(onibus)
-            val distance = this.location.distanceTo(localizacaoOnibus) / 1000
-            if (distance <= 1500) {
+            val distance = localizacaoOnibus.distanceTo(location) / 1000
+
+            if (distance <= 2000) {
                 onibusProximos.add(onibus)
             }
         }
@@ -230,7 +249,7 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         val latitude = onibus.latitude.replace(",", ".")
         val longitude = onibus.longitude.replace(",", ".")
 
-        val localizacaoOnibus = Location("newlocation")
+        val localizacaoOnibus = Location(onibus.ordem)
         localizacaoOnibus.latitude = latitude.toDouble()
         localizacaoOnibus.longitude = longitude.toDouble()
 
