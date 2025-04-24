@@ -12,47 +12,39 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.util.TimeZone
 
-class OnibusRepositoryImpl(
-    private val onibusWebClient: OnibusWebClient
-): OnibusRepository {
+class OnibusRepositoryImpl(private val onibusWebClient: OnibusWebClient): OnibusRepository {
 
     private val mediator = MediatorLiveData<Resource<List<Onibus>?>>()
 
-    override fun buscarOnibus(dataInicial: String, dataFinal: String): LiveData<Resource<List<Onibus>?>> {
+    override fun buscarOnibus(dataInicial: String,
+                              dataFinal: String): LiveData<Resource<List<Onibus>?>> {
         val failuresFromWebApiLiveData = MutableLiveData<Resource<List<Onibus>?>>()
 
         this.onibusWebClient.buscarOnibus(dataInicial, dataFinal,
             completion = { listaOnibus ->
                 listaOnibus?.let {
-                    mediator.value = Resource(it)
+                    val ultimasPosicoes = this.verificarHora(it)
+                    mediator.value = Resource(ultimasPosicoes)
                 }
             },
-            failure = {
-            }
+            failure = {}
         )
 
         return this.mediator
     }
 
-    private fun verificarHora(listOnibus: List<Onibus>): List<Onibus> {
+    private fun verificarHora(listaOnibus: List<Onibus>): List<Onibus> {
         val novaLista = mutableListOf<Onibus>()
-        for (onibus in listOnibus) {
+        for (onibus in listaOnibus) {
             val triggerTime =
                 LocalDateTime.ofInstant(
                     Instant.ofEpochMilli(onibus.datahoraenvio.toLong()),
                     TimeZone.getTimeZone("America/Sao_Paulo").toZoneId()
                 ).plusHours(1)
 
-            val diferencaEmSegundos = Duration.between(triggerTime, LocalDateTime.now())
-                                                    .toSeconds()
-            if (diferencaEmSegundos <= 10) {
-                var posicao = 0
-                for (onibusJaAdicionado in novaLista) {
-                    if (onibusJaAdicionado.ordem == onibus.ordem) {
-                        novaLista.removeAt(posicao)
-                    }
-                    posicao += 1
-                }
+            val diferencaEmSegundos = Duration.between(triggerTime, LocalDateTime.now()).seconds
+                                                    //.toSeconds()
+            if (diferencaEmSegundos <= 2) {
                 novaLista.add(onibus)
             }
         }
