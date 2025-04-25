@@ -7,10 +7,6 @@ import br.com.rodrigoamora.transitorio.model.Onibus
 import br.com.rodrigoamora.transitorio.network.webclient.OnibusWebClient
 import br.com.rodrigoamora.transitorio.repository.OnibusRepository
 import br.com.rodrigoamora.transitorio.repository.Resource
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDateTime
-import java.util.TimeZone
 
 class OnibusRepositoryImpl(private val onibusWebClient: OnibusWebClient): OnibusRepository {
 
@@ -33,29 +29,10 @@ class OnibusRepositoryImpl(private val onibusWebClient: OnibusWebClient): Onibus
         return this.mediator
     }
 
-    private fun verificarHora(listaOnibus: List<Onibus>): List<Onibus> {
-        val novaLista = mutableListOf<Onibus>()
-        for (onibus in listaOnibus) {
-            val triggerTime =
-                LocalDateTime.ofInstant(
-                    Instant.ofEpochMilli(onibus.datahoraenvio.toLong()),
-                    TimeZone.getTimeZone("America/Sao_Paulo").toZoneId()
-                ).plusHours(1)
-
-            val diferencaEmSegundos = Duration.between(triggerTime, LocalDateTime.now()).seconds
-                                                    //.toSeconds()
-            if (diferencaEmSegundos <= 2) {
-                novaLista.add(onibus)
-            }
-        }
-        return novaLista.toList()
-    }
-
     private fun removerOnibusRepetidos(listaOnibus: MutableList<Onibus>): MutableList<Onibus> {
         listaOnibus.reverse()
 
         var onibusAnterior = listaOnibus.get(0)
-
 
         val novaLista = mutableListOf<Onibus>()
         novaLista.add(onibusAnterior)
