@@ -145,7 +145,6 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
                     viewModel.buscarOnibus()
                         .observe(mainActivity,
                             Observer { resource ->
-                                limparMapa()
                                 resource.result?.let { listaOnibus ->
                                     val onibusProximos = verificarOnibusProximos(listaOnibus)
                                     populateMap(onibusProximos)
@@ -225,16 +224,18 @@ class OnibusFragment: Fragment(), LocationListener, OnMapReadyCallback {
         }
     }
 
-    private fun verificarOnibusProximos(listaOnibus: List<Onibus>): List<Onibus> {
+    private fun verificarOnibusProximos(listaOnibus: MutableList<Onibus>): List<Onibus> {
         val onibusProximos = mutableListOf<Onibus>()
         for (onibus in listaOnibus) {
             val localizacaoOnibus = this.instanciarNovaLocalizacao(onibus)
             val distance = localizacaoOnibus.distanceTo(location) / 1000
 
-            if (distance <= 2000) {
+            if (distance <= 2) {
                 onibusProximos.add(onibus)
             }
         }
+
+        listaOnibus.clear()
         return onibusProximos.toList()
     }
 
