@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 class OnibusViewModel(
     private val onibusRepository: OnibusRepository
 ): ViewModel() {
-    fun buscarOnibus(): LiveData<Resource<List<Onibus>?>> {
+    fun buscarOnibus(): LiveData<Resource<MutableList<Onibus>?>> {
         val dateTimeFormat = "yyyy-dd-MM:HH:mm:ss"
         val dataHora = LocalDateTime.now().getDateFormatted(dateTimeFormat)
         return this.onibusRepository.buscarOnibus(dataHora, dataHora)

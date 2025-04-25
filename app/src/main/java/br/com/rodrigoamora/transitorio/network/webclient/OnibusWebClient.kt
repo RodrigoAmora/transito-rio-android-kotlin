@@ -34,7 +34,7 @@ class OnibusWebClient(
 
     fun buscarOnibus(dataInicial: String,
                      dataFinal: String,
-                     completion: (listaOnibus: List<Onibus>?) -> Unit,
+                     completion: (listaOnibus: MutableList<Onibus>?) -> Unit,
                      failure: (errorCode: Int?) -> Unit
     ) {
         this.executeRequest(
