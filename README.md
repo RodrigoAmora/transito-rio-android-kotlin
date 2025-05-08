@@ -1,11 +1,11 @@
 # transito-rio-android-kotlin
 Descrição:
 ----------
-Projeto que consulta a API do Data.rio para pegar a posição da frota de ônibus em circulação do Rio de Janeiro, o app amostra a posição dos ônibus nos últimos 10 segundos.
+Projeto que consulta a API do Data.rio para pegar a posição da frota de ônibus em circulação do Rio de Janeiro, o app amostra a posição dos ônibus em tempo real.
 
 <br>
 
-O App roda a partir do Android 8.0 (API Level 26), usa a arquitetura MVVM, injeção de dependência e a API de localização do SDK.
+O App roda a partir do Android 12 (API Level 31), usa a arquitetura MVVM, injeção de dependência e a API de localização do SDK.
 
 Dependências:
 -------------
@@ -16,6 +16,7 @@ O projeto usa as seguintes dependência:
 - LifeCycle;
 - Material Design;
 - Navigation;
+- OkHTTP;
 - Retrofit;
 
 Configuração:
