@@ -6,13 +6,13 @@ plugins {
 
 android {
     namespace = "br.com.rodrigoamora.transitorio"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "br.com.rodrigoamora.transitorio"
 
         minSdk = 31
-        targetSdk = 34
+        targetSdk = 35
 
         versionCode = 44
         versionName = "4.1.1"
@@ -71,13 +71,13 @@ android {
 
 dependencies {
     //AndroidX
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.16.0")
 
     //AppCompat
     implementation("androidx.appcompat:appcompat:1.7.0")
 
     //ConstraintLayout
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
 
     //KOIN
     implementation("io.insert-koin:koin-android:3.4.1")
@@ -88,22 +88,22 @@ dependencies {
 
     //LIFECYCLE
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0")
 
     //MaterialDesign
     implementation("com.google.android.material:material:1.12.0")
 
     //Navigation Fragment
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.0")
 
     // OKHTTP
     implementation("com.squareup.okhttp3:logging-interceptor:3.13.1")
 
     // RETROFIT
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.10.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.10.0")
 
     ///// LIBS FOR TEST /////
     //jUnit
